@@ -8,21 +8,23 @@ abstract class AtomicMapSpec extends SpecificationWithJUnit {
   def createMap[A,B] : ScalaConcurrentMap[A,B]
   
   "AtomicMap" should {
-    val map = createMap[String,Int]
     
     "be a full concurrentmap implementation" in {
       "getOrElseUpdate" in {
+        val map = createMap[String,Int]
         map.getOrElseUpdate("blah", 1) must be_==(1)
         map.getOrElseUpdate("blah", 2) must be_==(1)
       }
 
       "replace(k,v)" in {
+        val map = createMap[String,Int]
         map.replace("blah", 1) must beNone
         map.put("blah", 1)
         map.replace("blah", 2) must beSome(1)
       }
 
       "replace(k, o, n)" in {
+        val map = createMap[String,Int]
         map.replace("blah", 2, 1) must be_==(false)
         map.put("blah", 1)
         println("map " + map)
@@ -31,6 +33,7 @@ abstract class AtomicMapSpec extends SpecificationWithJUnit {
       }
 
       "remove" in {
+        val map = createMap[String,Int]
         map.put("blah", 1)
         map.remove("blah", 2) must be_==(false)
         map.remove("blah", 1) must be_==(true)
@@ -38,23 +41,27 @@ abstract class AtomicMapSpec extends SpecificationWithJUnit {
       }
 
       "putIfAbsent" in {
+        val map = createMap[String,Int]
         map.putIfAbsent("blah", 1) must beNone
         map.putIfAbsent("blah", 2) must beSome(1)
         map.putIfAbsent("derp", 3) must beNone
       }
 
       "-=" in {
+        val map = createMap[String,Int]
         map.put("herp", 1)
         map -= "herp"
         map.get("herp") must beNone
       }
 
       "+=" in {
+        val map = createMap[String,Int]
         map += (("herp", 1))
         map.get("herp") must beSome(1)
       }
 
       "iterator" in {
+        val map = createMap[String,Int]
         map.put("herp", 1)
         map.put("derp", 2)
         
@@ -69,11 +76,13 @@ abstract class AtomicMapSpec extends SpecificationWithJUnit {
       }
       
       "get" in {
+        val map = createMap[String,Int]
         map.put("herp", 5)
         map.get("herp") must beSome(5)
       }
       
       "return a new empty" in {
+        val map = createMap[String,Int]
         map.put("herp", 1)
         val emptyMap = map.empty
         emptyMap.get("herp") must beNone
@@ -82,6 +91,7 @@ abstract class AtomicMapSpec extends SpecificationWithJUnit {
     
     "evaluate op only once" in {
       val counter = new AtomicInteger(0)
+      val map = createMap[String,Int]
       
       val threads = for (i <- (0 to 5)) yield {
         new Thread {
