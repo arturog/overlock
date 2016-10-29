@@ -1,6 +1,6 @@
 package overlock.lock
 
-import org.specs._
+import org.specs2.mutable._
 import java.util.{concurrent => juc}
 import juc.atomic._
 import java.util.concurrent.CountDownLatch
@@ -85,14 +85,14 @@ class SpinLockSpec extends SpecificationWithJUnit {
       readers.foreach(_.join)
       writers.foreach(_.join)
 
-      writes.get must ==(numWriters)
-      reads.get must ==(numReaders)
+      writes.get must be_==(numWriters)
+      reads.get must be_==(numReaders)
 
-      writersInCS.get must ==(0)
-      readersInCS.get must ==(0)
-      rwFlag.get must ==(false)
-      wrFlag.get must ==(false)
-      wwFlag.get must ==(false)
+      writersInCS.get must be_==(0)
+      readersInCS.get must be_==(0)
+      rwFlag.get must be_==(false)
+      wrFlag.get must be_==(false)
+      wwFlag.get must be_==(false)
     }
     
     "lock out multiple writers" in {
@@ -129,9 +129,9 @@ class SpinLockSpec extends SpecificationWithJUnit {
       threads.foreach(_.start)
       threads.foreach(_.join)
 
-      writes.get must ==(numWriters)
-      writerInCS.get must ==(false)
-      csViolated.get must ==(false)
+      writes.get must be_==(numWriters)
+      writerInCS.get must be_==(false)
+      csViolated.get must be_==(false)
     }
   }
 }

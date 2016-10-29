@@ -1,10 +1,11 @@
 package overlock.lock
 
-import org.specs._
+import org.specs2.mutable._
+import org.specs2.matcher._
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.atomic.AtomicBoolean
 
-class LockSpec extends SpecificationWithJUnit {
+class LockSpec extends SpecificationWithJUnit with ThrownMessages {
   "Lock" should {
     "acquire a lock with tryLock if it's not already held" in {
       val lock = new Lock
@@ -14,6 +15,7 @@ class LockSpec extends SpecificationWithJUnit {
       }.orElse {
         fail("Welp. You should have locked.")
       }
+      ok
     }
 
     "not acquire a lock with tryLock if it's already held" in {
@@ -41,6 +43,7 @@ class LockSpec extends SpecificationWithJUnit {
       } finally {
         done.set(true)
       }
+      ok
     }
 
     "be able to be held by multiple readers" in {
@@ -69,6 +72,7 @@ class LockSpec extends SpecificationWithJUnit {
         // Success
         true must beTrue
       }
+      ok
     }
 
     "be able to held by a single writer" in {
@@ -96,6 +100,7 @@ class LockSpec extends SpecificationWithJUnit {
         // Great Success!
         true must beTrue
       }
+      ok
     }
   }
 }

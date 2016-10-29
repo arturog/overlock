@@ -1,6 +1,6 @@
 package overlock.threadpool
 
-import org.specs._
+import org.specs2.mutable._
 import java.util.concurrent._
 
 class ElasticBlockingQueueSpec extends SpecificationWithJUnit {
@@ -13,7 +13,7 @@ class ElasticBlockingQueueSpec extends SpecificationWithJUnit {
       pool.execute(new Runnable {
         def run = Thread.sleep(100)
       })
-      pool.getPoolSize must ==(2)
+      pool.getPoolSize must be_==(2)
     }
     
     "switch to queueing behavior" in {
@@ -23,8 +23,8 @@ class ElasticBlockingQueueSpec extends SpecificationWithJUnit {
           def run = Thread.sleep(100)
         })
       }
-      pool.getPoolSize must ==(2)
-      pool.getQueue.size must ==(3)
+      pool.getPoolSize must be_==(2)
+      pool.getQueue.size must be_==(3)
     }
   }
 }

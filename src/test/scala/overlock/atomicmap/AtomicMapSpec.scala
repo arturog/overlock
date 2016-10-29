@@ -1,20 +1,19 @@
 package overlock.atomicmap
 
-import org.specs._
-import scala.collection.mutable.ConcurrentMap
-import scala.collection.JavaConversions._
+import org.specs2.mutable._
+import scala.collection.concurrent.{Map => ScalaConcurrentMap}
 import java.util.concurrent.atomic._
 
 abstract class AtomicMapSpec extends SpecificationWithJUnit {
-  def createMap[A,B] : ConcurrentMap[A,B]
+  def createMap[A,B] : ScalaConcurrentMap[A,B]
   
   "AtomicMap" should {
     val map = createMap[String,Int]
     
     "be a full concurrentmap implementation" in {
       "getOrElseUpdate" in {
-        map.getOrElseUpdate("blah", 1) must ==(1)
-        map.getOrElseUpdate("blah", 2) must ==(1)
+        map.getOrElseUpdate("blah", 1) must be_==(1)
+        map.getOrElseUpdate("blah", 2) must be_==(1)
       }
 
       "replace(k,v)" in {
@@ -24,17 +23,17 @@ abstract class AtomicMapSpec extends SpecificationWithJUnit {
       }
 
       "replace(k, o, n)" in {
-        map.replace("blah", 2, 1) must ==(false)
+        map.replace("blah", 2, 1) must be_==(false)
         map.put("blah", 1)
         println("map " + map)
-        map.replace("blah", 1, 2) must ==(true)
-        map("blah") must ==(2)
+        map.replace("blah", 1, 2) must be_==(true)
+        map("blah") must be_==(2)
       }
 
       "remove" in {
         map.put("blah", 1)
-        map.remove("blah", 2) must ==(false)
-        map.remove("blah", 1) must ==(true)
+        map.remove("blah", 2) must be_==(false)
+        map.remove("blah", 1) must be_==(true)
         map.get("blah") must beNone
       }
 
@@ -93,8 +92,8 @@ abstract class AtomicMapSpec extends SpecificationWithJUnit {
       }
       threads.foreach(_.start)
       threads.foreach(_.join)
-      map("blah") must ==(1)
-      counter.get must ==(1)
+      map("blah") must be_==(1)
+      counter.get must be_==(1)
     }
   }
 }
