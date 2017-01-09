@@ -1,8 +1,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
-  <groupId>com.boundary</groupId>
-  <artifactId>overlock-scala_2.12.0-RC2</artifactId>
+  <groupId>com.dmunch</groupId>
+  <artifactId>overlock-scala_2.12</artifactId>
   <version>0.9.0-SNAPSHOT</version>
 
   <name>overlock</name>
@@ -10,9 +10,10 @@
   <packaging>jar</packaging>
 
   <properties>
-    <scala.version>2.12.0-RC2</scala.version>
+    <scala.version>2.12.1</scala.version>
+    <scala.compat.version>2.12</scala.compat.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <slf4j.version>1.7.6</slf4j.version>
+    <slf4j.version>1.7.22</slf4j.version>
   </properties>
 
   <dependencies>
@@ -23,7 +24,7 @@
     </dependency>
     <dependency>
       <groupId>nl.grons</groupId>
-      <artifactId>metrics-scala_${scala.version}</artifactId>
+      <artifactId>metrics-scala_${scala.compat.version}</artifactId>
       <version>3.5.5</version>
     </dependency>
     <dependency>
@@ -33,20 +34,14 @@
     </dependency>
     <dependency>
       <groupId>org.specs2</groupId>
-      <artifactId>specs2-core_${scala.version}</artifactId>
-      <version>3.8.5</version>
+      <artifactId>specs2-core_${scala.compat.version}</artifactId>
+      <version>3.8.6</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.specs2</groupId>
-      <artifactId>specs2-junit_${scala.version}</artifactId>
-      <version>3.8.5</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.12</version>
+      <artifactId>specs2-junit_${scala.compat.version}</artifactId>
+      <version>3.8.6</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -68,9 +63,9 @@
 
     <plugins>
       <plugin>
-        <groupId>org.scala-tools</groupId>
-        <artifactId>maven-scala-plugin</artifactId>
-        <version>2.15.2</version>
+        <groupId>net.alchim31.maven</groupId>
+        <artifactId>scala-maven-plugin</artifactId>
+        <version>3.2.1</version>
         <executions>
           <execution>
             <goals>
@@ -78,17 +73,11 @@
               <goal>testCompile</goal>
             </goals>
           </execution>
-        </executions>                
-	      <configuration>
-          <args>
-            <arg>-unchecked</arg>
-            <arg>-deprecation</arg>
-          </args>
-          <charset>UTF-8</charset>
+        </executions>
+        <configuration>
           <scalaVersion>${scala.version}</scalaVersion>
         </configuration>
       </plugin>
-      
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -175,15 +164,10 @@
   </scm>
 
     <distributionManagement>
-        <repository>
-            <id>maven.boundary.com</id>
-            <name>maven.boundary.com-releases</name>
-            <url>http://maven.boundary.com/artifactory/external</url>
-        </repository>
-        <snapshotRepository>
-            <id>maven.boundary.com</id>
-            <name>maven.boundary.com-snapshots</name>
-            <url>http://maven.boundary.com/artifactory/external</url>
-        </snapshotRepository>
+      <snapshotRepository>
+        <id>snapshots</id>
+        <name>oss-jfrog-artifactory-snapshots</name>
+        <url>https://oss.jfrog.org/artifactory/oss-snapshot-local</url>
+      </snapshotRepository>
     </distributionManagement>
 </project>
