@@ -18,7 +18,7 @@ package overlock.threadpool
 import java.util.concurrent._
 import com.codahale.metrics.MetricRegistry
 import com.codahale.metrics._
-import nl.grons.metrics.scala.InstrumentedBuilder
+import nl.grons.metrics4.scala.InstrumentedBuilder
 import org.slf4j.LoggerFactory
 
 class InstrumentedThreadPoolExecutor(path : String,
