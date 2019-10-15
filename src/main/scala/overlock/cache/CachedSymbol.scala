@@ -17,6 +17,7 @@ package overlock.cache
 
 import overlock.atomicmap.AtomicMap
 
+@deprecated
 object CachedSymbol {
   val symbolCache = AtomicMap.atomicNBHM[String, Symbol]
 
