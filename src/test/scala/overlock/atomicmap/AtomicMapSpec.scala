@@ -95,7 +95,7 @@ abstract class AtomicMapSpec extends SpecificationWithJUnit {
       
       val threads = for (i <- (0 to 5)) yield {
         new Thread {
-          override def run {
+          override def run: Unit = {
             map.getOrElseUpdate("blah", {Thread.sleep(100); counter.incrementAndGet})
           }
         }

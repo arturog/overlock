@@ -34,7 +34,7 @@ class SpinLockSpec extends SpecificationWithJUnit {
       val readers =
         for(n <- 0 until numReaders) yield
           new Thread {
-            override def run {
+            override def run: Unit = {
               lock.readLock {
                 // allow readers to enter the critical section first
                 latch.countDown
@@ -61,7 +61,7 @@ class SpinLockSpec extends SpecificationWithJUnit {
       val writers =
         for(n <- 0 until numWriters) yield
           new Thread {
-            override def run {
+            override def run: Unit = {
               latch.countDown
               lock.writeLock {
                 try {
@@ -111,7 +111,7 @@ class SpinLockSpec extends SpecificationWithJUnit {
       val lock = new SpinLock
       val threads = for (n <- (0 until numWriters)) yield {
         new Thread {
-          override def run {
+          override def run: Unit = {
             // do our best to force contention with a latch
             latch.countDown
             lock.writeLock {

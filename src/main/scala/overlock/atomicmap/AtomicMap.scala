@@ -145,7 +145,7 @@ class AtomicMap[A,B](u : => JConcurrentMap[A,Any]) extends ScalaConcurrentMap[A,
         iter.hasNext
       }
       
-      def remove {
+      def remove: Unit = {
         iter.remove
       }
     }

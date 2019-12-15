@@ -33,16 +33,16 @@ class InstrumentedThreadPoolExecutor(path : String,
     InstrumentedBuilder {
   override val metricRegistry = new MetricRegistry()
   protected lazy val log = LoggerFactory.getLogger(getClass)
-  val requestRate = metrics.meter("request", "requests")
-  val rejectedRate = metrics.meter("rejected", "requests")
-  val executionTimer = metrics.timer("execution", path + "." + name)
-  val queueGauge = metrics.gauge("queue size", path + "." + name)(getQueue.size)
-  val threadGauge = metrics.gauge("threads", path + "." + name)(getPoolSize)
-  val activeThreadGauge = metrics.gauge("active threads", path + "." + name)(getActiveCount)
+  val requestRate = metrics.meter("request.requests")
+  val rejectedRate = metrics.meter("rejected.requests")
+  val executionTimer = metrics.timer(s"execution.${path}.name")
+  val queueGauge = metrics.gauge(s"queue size.${path}.${name}")(getQueue.size)
+  val threadGauge = metrics.gauge(s"threads${path}.${name}")(getPoolSize)
+  val activeThreadGauge = metrics.gauge(s"active threads.${path}.${name}")(getActiveCount)
   val startTime = new ThreadLocal[Long]
   
   setRejectedExecutionHandler(new RejectedExecutionHandler {
-    def rejectedExecution(r : Runnable, executor : ThreadPoolExecutor) {
+    def rejectedExecution(r : Runnable, executor : ThreadPoolExecutor): Unit = {
       rejectedRate.mark
       if (!workQueue.offer(r)) {
         log.warn("Work queue is not accepting work.")
@@ -50,16 +50,16 @@ class InstrumentedThreadPoolExecutor(path : String,
     }
   })
   
-  override def execute(r : Runnable) {
+  override def execute(r : Runnable): Unit = {
     requestRate.mark
     super.execute(r)
   }
   
-  override protected def beforeExecute(t : Thread, r : Runnable) {
+  override protected def beforeExecute(t : Thread, r : Runnable): Unit = {
     startTime.set(System.nanoTime)
   }
   
-  override protected def afterExecute(r : Runnable, t : Throwable) {
+  override protected def afterExecute(r : Runnable, t : Throwable): Unit = {
     val duration = System.nanoTime - startTime.get
     executionTimer.update(duration, TimeUnit.NANOSECONDS)
   }

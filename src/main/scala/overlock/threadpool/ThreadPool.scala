@@ -26,7 +26,7 @@ object ThreadPool {
       name,
       0, 
       Int.MaxValue, 
-      60l, 
+      60L,
       TimeUnit.SECONDS,
       new SynchronousQueue[Runnable],
       new NamedThreadFactory(name))
@@ -37,7 +37,7 @@ object ThreadPool {
       name,
       n,
       n,
-      60l,
+      60L,
       TimeUnit.SECONDS,
       new LinkedBlockingQueue[Runnable],
       new NamedThreadFactory(name))
@@ -49,7 +49,7 @@ object ThreadPool {
       name,
       coreSize,
       maxSize,
-      60l,
+      60L,
       TimeUnit.SECONDS,
       queue,
       new NamedThreadFactory(name))

@@ -9,7 +9,7 @@ class InstrumentedThreadPoolExecutorSpec extends SpecificationWithJUnit {
       val pool = ThreadPool.instrumentedFixed("threadpool", "1", 1).asInstanceOf[InstrumentedThreadPoolExecutor]
       val counter = new AtomicInteger(0)
       pool.execute(new Runnable {
-        def run {
+        def run: Unit = {
           counter.getAndIncrement
         }
       })

@@ -68,7 +68,7 @@ class Lock {
 }
 
 sealed class LockResult(private val success: Boolean) {
-  def orElse[U](f : => U) {
+  def orElse[U](f : => U): Unit = {
     if (!success) {
       f
     }

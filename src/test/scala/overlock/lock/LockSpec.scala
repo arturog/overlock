@@ -24,7 +24,7 @@ class LockSpec extends SpecificationWithJUnit with ThrownMessages {
       val holdUp = new CountDownLatch(1)
 
       val dontLetGo = new Thread {
-        override def run() {
+        override def run(): Unit = {
           lock.writeLock {
             holdUp.countDown()
             while (!done.get()) { /*do nothing*/ }
@@ -54,7 +54,7 @@ class LockSpec extends SpecificationWithJUnit with ThrownMessages {
 
       val readers =
         for (n <- 0 until numReaders) yield new Thread {
-          override def run() {
+          override def run(): Unit = {
             lock.tryReadLock {
               holdUp.countDown()
               while (!done.get) { /*spin, spin, spin*/}
@@ -81,7 +81,7 @@ class LockSpec extends SpecificationWithJUnit with ThrownMessages {
       val lock = new Lock
 
       val writer = new Thread {
-        override def run() {
+        override def run(): Unit = {
           lock.tryWriteLock {
             holdUp.countDown()
             while (!done.get) { /*keep on swimming, keep on swimming*/ }

@@ -25,7 +25,7 @@ import scala.math._
 
 object ThroughputTest {
   
-  def main(args : Array[String]) {
+  def main(args : Array[String]): Unit = {
     val test = new ThroughputTest {
       override def createMap[A,B](size : Int) = AtomicMap.atomicNBHM(size)
     }
@@ -50,23 +50,23 @@ abstract class ThroughputTest {
   
   val keys = new Array[String](keymax)
   for(i <- (0 until keymax)) {
-    keys(i) = i + "abc" + (i*17+123)
+    keys(i) = s"${i}abc${i * 17 + 123}"
   }
-  println(Runtime.getRuntime.availableProcessors + " CPU's")
-  println("created " + keymax + " keys")
+  println(s"${Runtime.getRuntime.availableProcessors} CPU's")
+  println(s"created ${keymax} keys")
   println("warming up JIT")
   //warmup
   val (warmupDuration,warmupOperations,warmupWrites) = run(1, warmupTime)
-  println("Warmup took " + warmupDuration / 1000000000.0 + "s for " + warmupOperations + " ops with ratio " + (warmupWrites.toDouble/warmupOperations))
+  println(s"Warmup took ${warmupDuration / 1000000000.0}s for ${warmupOperations} ops with ratio ${warmupWrites.toDouble/warmupOperations}")
   
-  def run {
+  def run: Unit = {
     println("noThreads\t" + (1 to noTrials).map("trial_" + _).mkString("\t") + "\tmean\tstddv")
     for (numThreads <- Range(threadMin, threadMax+1, threadInc)) {
-      print(numThreads + "\t")
+      print(s"${numThreads}\t")
       val (throughputs,ratios) = (for (trial <- (1 to noTrials)) yield {
         val (duration,operations,writes) = run(numThreads, trialTime)
         val throughput = operations / (duration / 1000000000.0)
-        print(throughput + "\t")
+        print(s"${throughput}\t")
         (throughput, writes.toDouble / operations)
       }).unzip
       printLineStats(throughputs, false)
@@ -74,15 +74,15 @@ abstract class ThroughputTest {
     }
   }
   
-  protected def printLineStats(stats : Seq[Double], printPreamble : Boolean) {
+  protected def printLineStats(stats : Seq[Double], printPreamble : Boolean): Unit = {
     val preamble = stats.mkString("\t")
     val mean = stats.reduceLeft(_ + _) / stats.size
     val variance = stats.map({ n => pow(n - mean, 2) }).reduceLeft(_ + _) / stats.size
     val stddev = sqrt(variance)
     if (printPreamble) {
-      println(preamble + "\t" + mean + "\t" + stddev)
+      println(s"${preamble}\t${mean}\t${stddev}")
     } else {
-      println(mean + "\t" + stddev)
+      println(s"${mean}\t${stddev}")
     }
     
   }
@@ -91,7 +91,7 @@ abstract class ThroughputTest {
     val map = createMap[String,String](tableSize)
     @volatile var startTime : Long = 0
     val barrier = new CyclicBarrier(numThreads, new Runnable {
-      def run {
+      def run: Unit = {
         startTime = System.nanoTime
       }
     })
@@ -115,14 +115,14 @@ class ThroughputThread(map : ScalaConcurrentMap[String,String], keys : Array[Str
   val random = new Random()
   val operations = new AtomicLong(0)
   val writes = new AtomicLong(0)
-  override def run {
+  override def run: Unit = {
     startBarrier.await
     while (! Thread.interrupted) {
       doOperation
     }
   }
   
-  protected def doOperation {
+  protected def doOperation: Unit = {
     val i = random.nextInt(keys.length)
 /*    println(i)*/
     val key = keys(i)

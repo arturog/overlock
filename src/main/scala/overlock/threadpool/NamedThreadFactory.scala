@@ -35,7 +35,7 @@ class NamedThreadFactory(val name : String, val priority : Int = Thread.NORM_PRI
 
 class ErrorLoggedThread(r : Runnable, threadName : String) extends Thread(r, threadName) {
   protected lazy val log = LoggerFactory.getLogger(getClass)
-  override def run {
+  override def run: Unit = {
     try {
       super.run
     } catch {
